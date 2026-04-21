@@ -108,8 +108,8 @@ export function Calculator() {
 
             {/* PASO 1 — Modelo de carro */}
             <div>
-              <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
-                1 · Modelo de carro eléctrico
+              <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-foreground sm:text-sm">
+                Modelo de carro eléctrico
               </label>
               <p className="mb-3 text-xs leading-relaxed text-muted-foreground sm:mb-4">
                 Seleccione el modelo. Si no aparece, use{" "}
@@ -125,8 +125,8 @@ export function Calculator() {
             {/* PASO 2 — Distancia por día */}
             <div>
               <div className="mb-2 flex items-center justify-between gap-3">
-                <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
-                  2 · Distancia por día
+                <label className="text-xs font-bold uppercase tracking-wider text-foreground sm:text-sm">
+                  Distancia por día
                 </label>
                 <div className="flex items-center gap-2">
                   {/* Unit toggle */}
