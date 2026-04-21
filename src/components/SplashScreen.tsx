@@ -3,21 +3,12 @@ import { Car, Sun, Zap } from "lucide-react";
 
 import logoUrl from "@/assets/windmar-logo.png";
 
-const STORAGE_KEY = "wh-splash-shown-v1";
-
 export function SplashScreen() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const alreadyShown = window.sessionStorage.getItem(STORAGE_KEY);
-    if (alreadyShown) return;
-
-    setVisible(true);
-    window.sessionStorage.setItem(STORAGE_KEY, "1");
-
-    const fadeTimer  = window.setTimeout(() => setFadeOut(true), 4000);
+    const fadeTimer   = window.setTimeout(() => setFadeOut(true), 4000);
     const removeTimer = window.setTimeout(() => setVisible(false), 4600);
     return () => {
       window.clearTimeout(fadeTimer);
