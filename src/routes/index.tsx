@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Windmar Home · Solar EV Calculator",
+        title: "CALCULADORA SOLAR PARA VEHICULOS ELECTRICOS",
       },
       {
         name: "description",

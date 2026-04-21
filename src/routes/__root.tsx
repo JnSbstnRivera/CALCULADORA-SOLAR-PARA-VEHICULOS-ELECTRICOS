@@ -37,7 +37,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Windmar Home · Calculadora Solar EV" },
+      { title: "CALCULADORA SOLAR PARA VEHICULOS ELECTRICOS" },
       {
         name: "description",
         content:
@@ -50,6 +50,7 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
         rel: "preconnect",
