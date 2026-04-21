@@ -32,7 +32,7 @@ export function RoadSlider({ value, onValueChange, unit = "mi", className }: Roa
       <div className="relative mb-3 h-14">
         {/* Animated connecting line behind the circles */}
         <div
-          className="pointer-events-none absolute top-[22px] h-[4px] -translate-y-1/2 overflow-hidden rounded-full bg-primary/40 dark:bg-foreground/20"
+          className="pointer-events-none absolute top-[22px] h-[4px] -translate-y-1/2 overflow-hidden rounded-full bg-primary/70"
           style={{
             left: `${pct(ROAD_STOPS[0])}%`,
             right: `${100 - pct(ROAD_STOPS[ROAD_STOPS.length - 1])}%`,

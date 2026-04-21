@@ -18,8 +18,27 @@ export function SplashScreen() {
 
   if (!visible) return null;
 
+  const lightVars: React.CSSProperties = {
+    "--background":        "oklch(0.985 0.003 240)",
+    "--foreground":        "oklch(0.18 0.02 260)",
+    "--primary":           "oklch(0.38 0.16 265)",
+    "--primary-foreground":"oklch(0.99 0 0)",
+    "--accent":            "oklch(0.76 0.16 60)",
+    "--accent-foreground": "oklch(0.18 0.02 260)",
+    "--secondary":         "oklch(0.82 0.06 255)",
+    "--secondary-foreground":"oklch(0.22 0.04 265)",
+    "--muted":             "oklch(0.95 0.005 250)",
+    "--muted-foreground":  "oklch(0.45 0.015 255)",
+    "--wh-blue":           "oklch(0.38 0.16 265)",
+    "--wh-yellow":         "oklch(0.76 0.16 60)",
+    "--gradient-charge":   "linear-gradient(90deg,oklch(0.38 0.16 265),oklch(0.55 0.13 250),oklch(0.76 0.16 60))",
+    "--shadow-glow-primary":"0 0 24px oklch(0.38 0.16 265 / 25%)",
+    "--shadow-glow-accent": "0 0 18px oklch(0.76 0.16 60 / 35%)",
+  } as React.CSSProperties;
+
   return (
     <div
+      style={lightVars}
       className={`fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background ${
         fadeOut ? "splash-fade-out" : ""
       }`}
@@ -99,10 +118,45 @@ export function SplashScreen() {
         </div>
 
         {/* Charge bar */}
-        <div className="relative h-2 w-56 overflow-hidden rounded-full bg-muted sm:w-72">
-          <div className="splash-bar absolute inset-y-0 left-0 rounded-full bg-[var(--gradient-charge)]">
-            <span className="charge-shimmer pointer-events-none absolute inset-0 rounded-full" />
+        <div className="flex flex-col items-center gap-2">
+          {/* Track */}
+          <div
+            className="relative h-4 w-64 overflow-hidden rounded-full sm:w-80"
+            style={{
+              background: "oklch(0.91 0.01 250)",
+              boxShadow: "inset 0 2px 5px oklch(0 0 0 / 18%)",
+            }}
+          >
+            {/* Fill */}
+            <div
+              className="splash-bar absolute inset-y-0 left-0 rounded-full bg-[var(--gradient-charge)]"
+              style={{ boxShadow: "inset 0 1px 0 oklch(1 0 0 / 30%)" }}
+            >
+              <span className="charge-shimmer-fast pointer-events-none absolute inset-0 rounded-full" />
+            </div>
+            {/* Segment ticks */}
+            {[25, 50, 75].map((p) => (
+              <div
+                key={p}
+                className="pointer-events-none absolute inset-y-1.5 w-px bg-black/10"
+                style={{ left: `${p}%` }}
+              />
+            ))}
           </div>
+          {/* Glow beneath bar */}
+          <div
+            className="splash-bar-glow pointer-events-none -mt-6 h-3 w-56 rounded-full blur-lg sm:w-72"
+            style={{
+              background:
+                "linear-gradient(90deg,oklch(0.38 0.16 265/50%),oklch(0.76 0.16 60/60%))",
+            }}
+          />
+          <p
+            className="splash-charging-label text-[10px] font-bold uppercase tracking-[0.35em]"
+            style={{ color: "oklch(0.45 0.015 255)" }}
+          >
+            Cargando…
+          </p>
         </div>
       </div>
     </div>
