@@ -5,9 +5,11 @@ import logoUrl from "@/assets/windmar-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   CAR_MODELS,
+  MI_TO_KM,
   calculate,
   type CalculatorInput,
   type CarModel,
+  type DistanceUnit,
 } from "@/lib/calculator";
 import { CarSelector } from "./CarSelector";
 import { ResultPanel } from "./ResultPanel";
@@ -16,6 +18,7 @@ import { RoadSlider } from "./RoadSlider";
 type Stored = {
   milesPerDay: number;
   carId: string;
+  unit: DistanceUnit;
 };
 
 const STORAGE_KEY = "ev-panels-calculator-v1";
@@ -23,16 +26,15 @@ const STORAGE_KEY = "ev-panels-calculator-v1";
 const defaults: Stored = {
   milesPerDay: 0,
   carId: "",
+  unit: "mi",
 };
 
 function loadStored(): Stored {
-  // Always start at zero state — only persist the car selection during the session.
   if (typeof window === "undefined") return defaults;
   try {
     const raw = window.sessionStorage.getItem(STORAGE_KEY);
     if (!raw) return defaults;
     const parsed = JSON.parse(raw) as Partial<Stored>;
-    // Force milesPerDay back to 0 on every fresh load.
     return { ...defaults, ...parsed, milesPerDay: 0 };
   } catch {
     return defaults;
@@ -50,17 +52,13 @@ export function Calculator() {
     if (typeof window === "undefined") return;
     try {
       window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {
-      /* ignore */
-    }
+    } catch { /* ignore */ }
   }, [state]);
 
   const car: CarModel | undefined = CAR_MODELS.find((c) => c.id === state.carId);
 
   const result = useMemo(() => {
-    if (!car) {
-      return { kwhPerDay: 0, kwhPerMonth: 0, kwhPerYear: 0, panelsNeeded: 0 };
-    }
+    if (!car) return { kwhPerDay: 0, kwhPerMonth: 0, kwhPerYear: 0, panelsNeeded: 0 };
     const input: CalculatorInput = {
       milesPerDay: state.milesPerDay,
       milesPerKwh: car.milesPerKwh,
@@ -71,13 +69,14 @@ export function Calculator() {
   const handleReset = () => {
     setState(defaults);
     if (typeof window !== "undefined") {
-      try {
-        window.localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        /* ignore */
-      }
+      try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
     }
   };
+
+  const displayDistance =
+    state.unit === "km"
+      ? Math.round(state.milesPerDay * MI_TO_KM)
+      : state.milesPerDay;
 
   return (
     <section className="relative px-3 pb-10 pt-4 sm:px-6 sm:pb-12 sm:pt-6 lg:px-8 lg:pt-8">
@@ -106,18 +105,57 @@ export function Calculator() {
 
         <div className="grid gap-5 lg:grid-cols-[1.1fr_1fr] lg:items-start">
           <div className="glass space-y-6 rounded-3xl p-4 sm:space-y-8 sm:p-6 lg:p-8">
+
+            {/* PASO 1 — Modelo de carro */}
+            <div>
+              <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
+                1 · Modelo de carro eléctrico
+              </label>
+              <p className="mb-3 text-xs leading-relaxed text-muted-foreground sm:mb-4">
+                Seleccione el modelo. Si no aparece, use{" "}
+                <span className="font-semibold text-foreground">"Otros"</span>{" "}
+                para un estimado estándar de la industria.
+              </p>
+              <CarSelector
+                selectedId={state.carId}
+                onSelect={(c) => setState((s) => ({ ...s, carId: c.id }))}
+              />
+            </div>
+
+            {/* PASO 2 — Distancia por día */}
             <div>
               <div className="mb-2 flex items-center justify-between gap-3">
                 <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
-                  1 · Millas por día
+                  2 · Distancia por día
                 </label>
                 <div className="flex items-center gap-2">
+                  {/* Unit toggle */}
+                  <div className="flex rounded-full border border-border bg-muted p-0.5 text-[11px] font-bold">
+                    {(["mi", "km"] as DistanceUnit[]).map((u) => (
+                      <button
+                        key={u}
+                        type="button"
+                        onClick={() => setState((s) => ({ ...s, unit: u }))}
+                        className={`rounded-full px-2.5 py-1 uppercase tracking-wider transition-all duration-200 ${
+                          state.unit === u
+                            ? "bg-primary text-primary-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {u}
+                      </button>
+                    ))}
+                  </div>
+                  {/* Display value */}
                   <div className="flex items-baseline gap-1">
                     <span className="font-display text-4xl font-bold tabular-nums text-foreground sm:text-5xl">
-                      {state.milesPerDay}
+                      {displayDistance}
                     </span>
-                    <span className="text-xs text-muted-foreground sm:text-sm">mi/día</span>
+                    <span className="text-xs text-muted-foreground sm:text-sm">
+                      {state.unit}/día
+                    </span>
                   </div>
+                  {/* Reset */}
                   <button
                     type="button"
                     onClick={handleReset}
@@ -135,28 +173,19 @@ export function Calculator() {
               </p>
               <RoadSlider
                 value={state.milesPerDay}
+                unit={state.unit}
                 onValueChange={(v) => setState((s) => ({ ...s, milesPerDay: v }))}
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
-                2 · Modelo de carro eléctrico
-              </label>
-              <p className="mb-3 text-xs leading-relaxed text-muted-foreground sm:mb-4">
-                Seleccione el modelo. Si no aparece, use{" "}
-                <span className="font-semibold text-foreground">"Otros"</span>{" "}
-                para un estimado estándar de la industria.
-              </p>
-              <CarSelector
-                selectedId={state.carId}
-                onSelect={(c) => setState((s) => ({ ...s, carId: c.id }))}
               />
             </div>
           </div>
 
           <div className="lg:sticky lg:top-4">
-            <ResultPanel result={result} car={car} milesPerDay={state.milesPerDay} />
+            <ResultPanel
+              result={result}
+              car={car}
+              milesPerDay={state.milesPerDay}
+              unit={state.unit}
+            />
           </div>
         </div>
       </div>

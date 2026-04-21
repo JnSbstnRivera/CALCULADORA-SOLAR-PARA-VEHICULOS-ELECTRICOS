@@ -69,3 +69,6 @@ export function formatNumber(n: number, digits = 0): string {
 export const ROAD_STOPS = [10, 20, 30, 40, 50] as const;
 export const MIN_MILES = 5;
 export const MAX_MILES = 60;
+
+export const MI_TO_KM = 1.60934;
+export type DistanceUnit = "mi" | "km";

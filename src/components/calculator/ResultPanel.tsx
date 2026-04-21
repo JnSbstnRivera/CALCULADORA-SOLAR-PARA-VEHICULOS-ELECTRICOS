@@ -2,12 +2,14 @@ import { CarFront, Sun, Zap } from "lucide-react";
 
 import { useCountUp } from "@/hooks/use-count-up";
 import {
+  MI_TO_KM,
   PANEL_KWH_PER_DAY,
   PANEL_WATTS,
   PEAK_SUN_HOURS,
   formatNumber,
   type CalculatorResult,
   type CarModel,
+  type DistanceUnit,
 } from "@/lib/calculator";
 import { SolarPanelIcon } from "./SolarPanelIcon";
 
@@ -15,9 +17,13 @@ type ResultPanelProps = {
   result: CalculatorResult;
   car: CarModel | undefined;
   milesPerDay: number;
+  unit?: DistanceUnit;
 };
 
-export function ResultPanel({ result, car, milesPerDay }: ResultPanelProps) {
+export function ResultPanel({ result, car, milesPerDay, unit = "mi" }: ResultPanelProps) {
+  const displayDistance =
+    unit === "km" ? Math.round(milesPerDay * MI_TO_KM) : milesPerDay;
+  const unitLabel = unit === "km" ? "km" : "millas";
   const panels = useCountUp(result.panelsNeeded);
   const kwhDay = useCountUp(result.kwhPerDay, 600);
   const hasCar = Boolean(car);
@@ -91,7 +97,7 @@ export function ResultPanel({ result, car, milesPerDay }: ResultPanelProps) {
                 <span>
                   Su carro gasta{" "}
                   <strong>{formatNumber(kwhDay, 1)} kWh al día</strong>{" "}
-                  manejando {milesPerDay} millas.
+                  manejando {displayDistance} {unitLabel}.
                 </span>
               </li>
               <li className="flex gap-2">

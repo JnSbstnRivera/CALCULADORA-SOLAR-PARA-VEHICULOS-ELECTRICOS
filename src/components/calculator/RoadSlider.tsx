@@ -3,11 +3,12 @@ import { useState } from "react";
 
 import logoUrl from "@/assets/windmar-logo.png";
 import { cn } from "@/lib/utils";
-import { MAX_MILES, MIN_MILES, ROAD_STOPS } from "@/lib/calculator";
+import { MAX_MILES, MI_TO_KM, MIN_MILES, ROAD_STOPS, type DistanceUnit } from "@/lib/calculator";
 
 type RoadSliderProps = {
   value: number;
   onValueChange: (value: number) => void;
+  unit?: DistanceUnit;
   className?: string;
 };
 
@@ -15,11 +16,15 @@ type RoadSliderProps = {
  * Straight-road slider with an inset "charge bar" fill.
  * Mileage stops sit above the road; click one to jump, drag the thumb to fine-tune.
  */
-export function RoadSlider({ value, onValueChange, className }: RoadSliderProps) {
+export function RoadSlider({ value, onValueChange, unit = "mi", className }: RoadSliderProps) {
   const [hovered, setHovered] = useState<number | null>(null);
 
   const pct = (n: number) =>
     ((n - MIN_MILES) / (MAX_MILES - MIN_MILES)) * 100;
+
+  const stopLabel = (stop: number) =>
+    unit === "km" ? Math.round(stop * MI_TO_KM) : stop;
+  const unitLabel = unit === "km" ? "Km" : "Millas";
 
   return (
     <div className={cn("w-full select-none", className)}>
@@ -80,7 +85,7 @@ export function RoadSlider({ value, onValueChange, className }: RoadSliderProps)
                 )}
               >
                 <span className="font-display text-xs font-bold leading-none tabular-nums">
-                  {stop}
+                  {stopLabel(stop)}
                 </span>
                 <span
                   className={cn(
@@ -88,7 +93,7 @@ export function RoadSlider({ value, onValueChange, className }: RoadSliderProps)
                     isActive ? "opacity-90" : "opacity-70"
                   )}
                 >
-                  Millas
+                  {unitLabel}
                 </span>
               </span>
             </button>
