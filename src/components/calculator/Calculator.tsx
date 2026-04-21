@@ -3,9 +3,12 @@ import { RotateCcw } from "lucide-react";
 
 import logoUrl from "@/assets/windmar-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SettingsPopover, type CalcSettings } from "@/components/SettingsPopover";
 import {
   CAR_MODELS,
   MI_TO_KM,
+  PANEL_WATTS,
+  PEAK_SUN_HOURS,
   calculate,
   type CalculatorInput,
   type CarModel,
@@ -19,6 +22,8 @@ type Stored = {
   milesPerDay: number;
   carId: string;
   unit: DistanceUnit;
+  panelWatts: number;
+  peakSunHours: number;
 };
 
 const STORAGE_KEY = "ev-panels-calculator-v1";
@@ -27,6 +32,8 @@ const defaults: Stored = {
   milesPerDay: 0,
   carId: "",
   unit: "mi",
+  panelWatts: PANEL_WATTS,
+  peakSunHours: PEAK_SUN_HOURS,
 };
 
 function loadStored(): Stored {
@@ -58,13 +65,21 @@ export function Calculator() {
   const car: CarModel | undefined = CAR_MODELS.find((c) => c.id === state.carId);
 
   const result = useMemo(() => {
-    if (!car) return { kwhPerDay: 0, kwhPerMonth: 0, kwhPerYear: 0, panelsNeeded: 0 };
+    const panelKwhPerDay = (state.panelWatts * state.peakSunHours) / 1000;
+    if (!car) return { kwhPerDay: 0, kwhPerMonth: 0, kwhPerYear: 0, panelsNeeded: 0, panelKwhPerDay };
     const input: CalculatorInput = {
       milesPerDay: state.milesPerDay,
       milesPerKwh: car.milesPerKwh,
+      panelWatts: state.panelWatts,
+      peakSunHours: state.peakSunHours,
     };
     return calculate(input);
   }, [state, car]);
+
+  const settings: CalcSettings = {
+    panelWatts: state.panelWatts,
+    peakSunHours: state.peakSunHours,
+  };
 
   const handleReset = () => {
     setState(defaults);
@@ -99,6 +114,10 @@ export function Calculator() {
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
+            <SettingsPopover
+              settings={settings}
+              onChange={(s) => setState((prev) => ({ ...prev, ...s }))}
+            />
             <ThemeToggle />
           </div>
         </header>
@@ -185,6 +204,8 @@ export function Calculator() {
               car={car}
               milesPerDay={state.milesPerDay}
               unit={state.unit}
+              panelWatts={state.panelWatts}
+              peakSunHours={state.peakSunHours}
             />
           </div>
         </div>

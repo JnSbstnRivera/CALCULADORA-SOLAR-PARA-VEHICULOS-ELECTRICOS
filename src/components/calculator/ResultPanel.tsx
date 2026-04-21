@@ -3,7 +3,6 @@ import { CarFront, Sun, Zap } from "lucide-react";
 import { useCountUp } from "@/hooks/use-count-up";
 import {
   MI_TO_KM,
-  PANEL_KWH_PER_DAY,
   PANEL_WATTS,
   PEAK_SUN_HOURS,
   formatNumber,
@@ -18,12 +17,22 @@ type ResultPanelProps = {
   car: CarModel | undefined;
   milesPerDay: number;
   unit?: DistanceUnit;
+  panelWatts?: number;
+  peakSunHours?: number;
 };
 
-export function ResultPanel({ result, car, milesPerDay, unit = "mi" }: ResultPanelProps) {
+export function ResultPanel({
+  result,
+  car,
+  milesPerDay,
+  unit = "mi",
+  panelWatts = PANEL_WATTS,
+  peakSunHours = PEAK_SUN_HOURS,
+}: ResultPanelProps) {
   const displayDistance =
     unit === "km" ? Math.round(milesPerDay * MI_TO_KM) : milesPerDay;
   const unitLabel = unit === "km" ? "km" : "millas";
+  const panelKwhPerDay = result.panelKwhPerDay ?? (panelWatts * peakSunHours) / 1000;
   const panels = useCountUp(result.panelsNeeded);
   const kwhDay = useCountUp(result.kwhPerDay, 600);
   const hasCar = Boolean(car);
@@ -82,7 +91,7 @@ export function ResultPanel({ result, car, milesPerDay, unit = "mi" }: ResultPan
             <Stat
               icon={<Sun className="size-4" />}
               label="Por panel / día"
-              value={`${formatNumber(PANEL_KWH_PER_DAY, 2)} kWh`}
+              value={`${formatNumber(panelKwhPerDay, 2)} kWh`}
             />
           </div>
 
@@ -125,7 +134,10 @@ export function ResultPanel({ result, car, milesPerDay, unit = "mi" }: ResultPan
       )}
 
       <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">
-        Estimación basada en {PEAK_SUN_HOURS} horas pico de sol al día.
+        Estimación basada en{" "}
+        <span className="font-semibold text-foreground">{peakSunHours.toFixed(1)} h</span> de sol
+        y paneles de{" "}
+        <span className="font-semibold text-foreground">{panelWatts} W</span> al día.
       </p>
     </div>
   );

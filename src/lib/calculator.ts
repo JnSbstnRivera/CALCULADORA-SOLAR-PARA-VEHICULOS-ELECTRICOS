@@ -29,15 +29,20 @@ export const CAR_MODELS: CarModel[] = [
   { id: "otros", brand: "Otros", name: "Estimado estándar", milesPerKwh: 3.5 },
 ];
 
-/** Solar panel output: 410 W per panel × peak sun hours per day. */
+/** Solar panel reference values (defaults for Puerto Rico). */
 export const PANEL_WATTS = 410;
-export const PEAK_SUN_HOURS = 4.2;
-/** Daily kWh produced by one 410 W panel (≈ 1.72 kWh/day). */
+export const PEAK_SUN_HOURS = 4.5;
+/** Daily kWh produced by one panel at default settings. */
 export const PANEL_KWH_PER_DAY = (PANEL_WATTS * PEAK_SUN_HOURS) / 1000;
+
+/** Common residential panel wattages offered in the selector. */
+export const PANEL_WATT_OPTIONS = [250, 300, 320, 350, 380, 400, 410, 440, 450, 480, 500, 550, 600] as const;
 
 export type CalculatorInput = {
   milesPerDay: number;
   milesPerKwh: number;
+  panelWatts?: number;
+  peakSunHours?: number;
 };
 
 export type CalculatorResult = {
@@ -45,17 +50,20 @@ export type CalculatorResult = {
   kwhPerMonth: number;
   kwhPerYear: number;
   panelsNeeded: number;
+  panelKwhPerDay: number;
 };
 
 export function calculate(input: CalculatorInput): CalculatorResult {
   const miles = Math.max(0, input.milesPerDay);
   const kwhPerDay = miles / Math.max(0.1, input.milesPerKwh);
-  const panelsNeeded = Math.ceil(kwhPerDay / PANEL_KWH_PER_DAY);
+  const panelKwhPerDay = ((input.panelWatts ?? PANEL_WATTS) * (input.peakSunHours ?? PEAK_SUN_HOURS)) / 1000;
+  const panelsNeeded = Math.ceil(kwhPerDay / panelKwhPerDay);
   return {
     kwhPerDay,
     kwhPerMonth: kwhPerDay * 30,
     kwhPerYear: kwhPerDay * 365,
     panelsNeeded: Number.isFinite(panelsNeeded) ? panelsNeeded : 0,
+    panelKwhPerDay,
   };
 }
 
