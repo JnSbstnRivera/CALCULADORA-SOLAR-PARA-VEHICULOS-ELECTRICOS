@@ -1,7 +1,7 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { useState } from "react";
 
-import logoUrl from "@/assets/windmar-logo.png";
+import truckUrl from "@/assets/windmar-truck.png";
 import { cn } from "@/lib/utils";
 import { MAX_MILES, MI_TO_KM, MIN_MILES, ROAD_STOPS, type DistanceUnit } from "@/lib/calculator";
 
@@ -142,23 +142,25 @@ export function RoadSlider({ value, onValueChange, unit = "mi", className }: Roa
           </SliderPrimitive.Range>
         </SliderPrimitive.Track>
 
-        {/* Thumb — Windmar logo as the moving marker */}
+        {/* Thumb — Windmar truck as the moving marker */}
         <SliderPrimitive.Thumb
           aria-label="Miles per day"
           className={cn(
-            "block h-20 w-24 cursor-grab",
-            "transition-transform duration-150 hover:scale-115 active:scale-100 active:cursor-grabbing",
-            "focus:outline-none focus-visible:scale-115"
+            "block h-16 w-32 cursor-grab",
+            "transition-transform duration-150 hover:scale-110 active:scale-95 active:cursor-grabbing",
+            "focus:outline-none focus-visible:scale-110"
           )}
         >
           <img
-            src={logoUrl}
+            src={truckUrl}
             alt=""
             draggable={false}
             className={cn(
               "pointer-events-none h-full w-full object-contain",
-              "drop-shadow-[0_0_18px_oklch(0.38_0.16_265/80%)]",
-              "drop-shadow-[0_6px_14px_oklch(0_0_0/55%)]"
+              "drop-shadow-[0_0_14px_oklch(0.38_0.16_265/70%)]",
+              "drop-shadow-[0_0_28px_oklch(0.55_0.18_265/50%)]",
+              "drop-shadow-[0_4px_10px_oklch(0_0_0/40%)]",
+              "brightness-105 saturate-110"
             )}
           />
         </SliderPrimitive.Thumb>
