@@ -202,7 +202,7 @@ export function Calculator() {
                 </div>
               </div>
               <p className="mb-3 text-xs leading-relaxed text-muted-foreground sm:mb-4">
-                Arrastre el logo sobre la carretera o pulse una parada para
+                Arrastre la camioneta sobre la carretera o pulse una parada para
                 indicar el recorrido diario promedio.
               </p>
               <RoadSlider

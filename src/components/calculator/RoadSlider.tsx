@@ -157,10 +157,11 @@ export function RoadSlider({ value, onValueChange, unit = "mi", className }: Roa
             draggable={false}
             className={cn(
               "pointer-events-none h-full w-full object-contain",
-              "drop-shadow-[0_0_14px_oklch(0.38_0.16_265/70%)]",
-              "drop-shadow-[0_0_28px_oklch(0.55_0.18_265/50%)]",
-              "drop-shadow-[0_4px_10px_oklch(0_0_0/40%)]",
-              "brightness-105 saturate-110"
+              "drop-shadow-[0_0_10px_oklch(0.38_0.16_265/90%)]",
+              "drop-shadow-[0_0_22px_oklch(0.55_0.18_265/70%)]",
+              "drop-shadow-[0_0_40px_oklch(0.65_0.16_265/45%)]",
+              "drop-shadow-[0_5px_12px_oklch(0_0_0/45%)]",
+              "brightness-110 saturate-125 contrast-105"
             )}
           />
         </SliderPrimitive.Thumb>
