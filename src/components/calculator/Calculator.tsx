@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Zap, TrendingDown, ShieldCheck } from "lucide-react";
 
 import logoUrl from "@/assets/windmar-logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -96,29 +96,54 @@ export function Calculator() {
   return (
     <section className="relative px-3 pb-10 pt-4 sm:px-6 sm:pb-12 sm:pt-6 lg:px-8 lg:pt-8">
       <div className="mx-auto max-w-5xl">
-        <header className="mb-6 flex flex-col items-center gap-3 sm:mb-8 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-5 sm:text-left">
-            <img
-              src={logoUrl}
-              alt="Windmar Home"
-              className="h-16 w-auto shrink-0 sm:h-24 lg:h-28"
-              loading="eager"
-            />
-            <div className="text-center sm:text-left">
-              <h1 className="font-display text-2xl font-bold uppercase leading-tight tracking-tight text-primary sm:text-3xl lg:text-4xl">
-                Calculadora Solar{" "}
-                <span className="block text-foreground sm:inline">
-                  para Vehículos Eléctricos
-                </span>
-              </h1>
+
+        {/* ── Header ── */}
+        <header className="mb-6 sm:mb-8">
+          {/* Barra acento naranja */}
+          <div className="h-1 w-3/5 rounded-full bg-accent mb-4" />
+
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Logo + Título */}
+            <div className="flex items-center gap-4">
+              <div className="bg-white rounded-xl p-2.5 shadow-lg border border-border shrink-0 hover:scale-105 transition-transform">
+                <img
+                  src={logoUrl}
+                  alt="Windmar Home"
+                  className="h-12 w-auto sm:h-14"
+                  loading="eager"
+                />
+              </div>
+              <div>
+                <h1 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold uppercase leading-tight tracking-tight text-primary">
+                  Calculadora Solar{" "}
+                  <span className="block text-foreground sm:inline text-lg sm:text-xl lg:text-2xl">
+                    para Vehículos Eléctricos
+                  </span>
+                </h1>
+                <p className="text-[11px] text-muted-foreground mt-0.5 font-medium tracking-wide">
+                  Windmar Home • Puerto Rico
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
-            <SettingsPopover
-              settings={settings}
-              onChange={(s) => setState((prev) => ({ ...prev, ...s }))}
-            />
-            <ThemeToggle />
+
+            {/* Botones */}
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={handleReset}
+                aria-label="Reiniciar calculadora"
+                title="Reiniciar"
+                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold text-muted-foreground border border-border hover:bg-muted hover:text-foreground transition-colors"
+              >
+                <RotateCcw className="size-3.5" />
+                Reiniciar
+              </button>
+              <SettingsPopover
+                settings={settings}
+                onChange={(s) => setState((prev) => ({ ...prev, ...s }))}
+              />
+              <ThemeToggle />
+            </div>
           </div>
         </header>
 
@@ -174,16 +199,6 @@ export function Calculator() {
                       {state.unit}/día
                     </span>
                   </div>
-                  {/* Reset */}
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    aria-label="Reiniciar calculadora"
-                    title="Reiniciar"
-                    className="rounded-full p-1.5 text-muted-foreground/60 transition-colors hover:bg-primary/10 hover:text-primary"
-                  >
-                    <RotateCcw className="size-3.5" />
-                  </button>
                 </div>
               </div>
               <p className="mb-3 text-xs leading-relaxed text-muted-foreground sm:mb-4">
@@ -209,6 +224,53 @@ export function Calculator() {
             />
           </div>
         </div>
+
+        {/* ── Footer ── */}
+        <footer className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-border">
+          <div className="flex gap-4">
+            <div className="bg-accent/10 p-3 rounded-xl h-fit shrink-0">
+              <Zap className="text-accent" size={22} />
+            </div>
+            <div>
+              <h4 className="font-bold text-foreground text-sm mb-1">Carga Solar 100% Limpia</h4>
+              <p className="text-muted-foreground text-xs leading-relaxed">
+                Nuestros paneles de alta eficiencia convierten la luz del sol en la energía exacta que necesita tu vehículo eléctrico cada día.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <div className="bg-primary/10 p-3 rounded-xl h-fit shrink-0">
+              <TrendingDown className="text-primary" size={22} />
+            </div>
+            <div>
+              <h4 className="font-bold text-foreground text-sm mb-1">Ahorro Real en Combustible</h4>
+              <p className="text-muted-foreground text-xs leading-relaxed">
+                Elimina el costo mensual de cargar tu EV. Calcula cuántos paneles necesitas según tu recorrido diario y deja de pagar por gasolina.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <div className="bg-primary/10 p-3 rounded-xl h-fit shrink-0">
+              <ShieldCheck className="text-primary" size={22} />
+            </div>
+            <div>
+              <h4 className="font-bold text-foreground text-sm mb-1">Instalación Certificada</h4>
+              <p className="text-muted-foreground text-xs leading-relaxed">
+                Técnicos certificados en Puerto Rico. Instalación profesional, garantía de fabricante y soporte al cliente disponible 24/7.
+              </p>
+            </div>
+          </div>
+        </footer>
+
+        {/* Copyright */}
+        <div className="text-center pt-6 pb-2">
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">
+            © 2026 Windmar Home • Todos los derechos reservados
+          </p>
+        </div>
+
       </div>
     </section>
   );
