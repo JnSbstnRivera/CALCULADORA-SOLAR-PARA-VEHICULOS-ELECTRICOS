@@ -63,7 +63,7 @@ export function ResultPanel({
             <p className="mt-1.5 text-[11px] font-medium text-muted-foreground sm:text-xs">
               panel{Math.round(panels) === 1 ? "" : "es"} de{" "}
               <span className="font-semibold text-foreground">
-                {PANEL_WATTS} W
+                {panelWatts} W
               </span>
             </p>
           </div>
@@ -113,7 +113,7 @@ export function ResultPanel({
                 <span className="text-primary">☀️</span>
                 <span>
                   Cada panel le da{" "}
-                  <strong>{formatNumber(PANEL_KWH_PER_DAY, 2)} kWh al día</strong>{" "}
+                  <strong>{formatNumber(panelKwhPerDay, 2)} kWh al día</strong>{" "}
                   con sol normal.
                 </span>
               </li>
