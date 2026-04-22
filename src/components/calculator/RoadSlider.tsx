@@ -152,12 +152,12 @@ export function RoadSlider({ value, onValueChange, unit = "mi", className }: Roa
           )}
         >
           <div className="relative h-full w-full">
-            {/* Glow halo behind the truck */}
+            {/* Glow halo behind the truck — WH Amarillo suave */}
             <div
               className="pointer-events-none absolute inset-x-2 inset-y-1 rounded-full blur-2xl"
               style={{
                 background:
-                  "radial-gradient(ellipse 80% 70% at 50% 60%, #1D429B 0%, rgba(29,66,155,0.55) 45%, transparent 75%)",
+                  "radial-gradient(ellipse 80% 70% at 50% 60%, rgba(248,155,36,0.45) 0%, rgba(248,155,36,0.2) 50%, transparent 75%)",
               }}
             />
             {/* Truck image with combined CSS filter */}
@@ -168,11 +168,11 @@ export function RoadSlider({ value, onValueChange, unit = "mi", className }: Roa
               className="pointer-events-none relative h-full w-full object-contain"
               style={{
                 filter:
-                  "drop-shadow(0 0 6px #1D429B) " +
-                  "drop-shadow(0 0 16px rgba(29,66,155,0.85)) " +
-                  "drop-shadow(0 0 32px rgba(29,66,155,0.55)) " +
-                  "drop-shadow(0 5px 10px rgba(0,0,0,0.5)) " +
-                  "brightness(1.12) saturate(1.25) contrast(1.05)",
+                  "drop-shadow(0 0 5px rgba(248,155,36,0.80)) " +
+                  "drop-shadow(0 0 14px rgba(248,155,36,0.50)) " +
+                  "drop-shadow(0 0 28px rgba(248,155,36,0.25)) " +
+                  "drop-shadow(0 4px 8px rgba(0,0,0,0.45)) " +
+                  "brightness(1.08) saturate(1.15)",
               }}
             />
           </div>
