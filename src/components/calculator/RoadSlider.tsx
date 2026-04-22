@@ -151,19 +151,31 @@ export function RoadSlider({ value, onValueChange, unit = "mi", className }: Roa
             "focus:outline-none focus-visible:scale-110"
           )}
         >
-          <img
-            src={truckUrl}
-            alt=""
-            draggable={false}
-            className={cn(
-              "pointer-events-none h-full w-full object-contain",
-              "drop-shadow-[0_0_10px_oklch(0.38_0.16_265/90%)]",
-              "drop-shadow-[0_0_22px_oklch(0.55_0.18_265/70%)]",
-              "drop-shadow-[0_0_40px_oklch(0.65_0.16_265/45%)]",
-              "drop-shadow-[0_5px_12px_oklch(0_0_0/45%)]",
-              "brightness-110 saturate-125 contrast-105"
-            )}
-          />
+          <div className="relative h-full w-full">
+            {/* Glow halo behind the truck */}
+            <div
+              className="pointer-events-none absolute inset-x-2 inset-y-1 rounded-full blur-2xl"
+              style={{
+                background:
+                  "radial-gradient(ellipse 80% 70% at 50% 60%, #1D429B 0%, rgba(29,66,155,0.55) 45%, transparent 75%)",
+              }}
+            />
+            {/* Truck image with combined CSS filter */}
+            <img
+              src={truckUrl}
+              alt=""
+              draggable={false}
+              className="pointer-events-none relative h-full w-full object-contain"
+              style={{
+                filter:
+                  "drop-shadow(0 0 6px #1D429B) " +
+                  "drop-shadow(0 0 16px rgba(29,66,155,0.85)) " +
+                  "drop-shadow(0 0 32px rgba(29,66,155,0.55)) " +
+                  "drop-shadow(0 5px 10px rgba(0,0,0,0.5)) " +
+                  "brightness(1.12) saturate(1.25) contrast(1.05)",
+              }}
+            />
+          </div>
         </SliderPrimitive.Thumb>
       </SliderPrimitive.Root>
     </div>
